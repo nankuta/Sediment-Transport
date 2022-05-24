@@ -61,7 +61,7 @@ x_terrain = linspace(x_bounds(1), 1+x_bounds(2), npoints);
 y_terrain = linspace(y_bounds(1), 1+y_bounds(2), npoints);
 
 %magnitude of intial velocity for stochastically emitted particles
-liftoffmag = 5;
+liftoffmag = 3;
 
 for t = 1:n_steps
     clf
@@ -76,8 +76,8 @@ for t = 1:n_steps
         
         %intialize velocity if particle was previously stationary
         if (u(i) == 0 && v(i) == 0 && w(i) == 0)
-            u(i) = liftoffmag*randn;
-            v(i) = liftoffmag*randn;
+            u(i) = (liftoffmag^2)*randn;
+            v(i) = (liftoffmag^2)*randn;
             w(i) = liftoffmag*abs(randn);
         end
         
@@ -158,7 +158,7 @@ function [du, dv, dw] = d_vel(x, y, z, u, v, w, g, sigma_p, d, nu)
     c = -.75*C_d/(sigma_p*d);
     du = c*shear_mag*((u-y)/(r^2));
     dv = c*shear_mag*((v+x)/(r^2));
-    dw = w*shear_mag*(abs(x)/(r^2)) - g;
+    dw = w*shear_mag/(r^2) - g;
 end
 
 %interpolation function used in generating height map
